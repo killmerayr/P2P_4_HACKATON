@@ -28,7 +28,7 @@ export default function Register() {
             className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
           />
           
-          <button className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition font-semibold">
+          <button className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-semibold">
             Зарегистрироваться
           </button>
         </div>

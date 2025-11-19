@@ -3,6 +3,8 @@ import SkillGrid from './components/SkillGrid';
 import Login from './pages/Login';
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import Register from './pages/Register';
+import CreateAd from './pages/CreateAd';
+import Messages from './pages/Messages';
 
 export default function App() {
   return (
@@ -25,6 +27,8 @@ export default function App() {
           
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/create' element={<CreateAd />} />
+          <Route path='/messages' element={<Messages />} />
         </Routes>
       </div>
     </Router>

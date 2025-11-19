@@ -17,10 +17,10 @@ export default function Header() {
           <Link to="/" className="font-semibold text-gray-800 hover:bg-purple-50 hover:text-blue-600 transition-colors px-4 py-2 rounded-lg hover:shadow-lg focus:outline-none">
             Главная
           </Link>
-          <Link to="/create" className="font-semibold text-gray-800 hover:bg-purple-50 hover:text-blue-600 transition-colors px-4 py-2 rounded-lg focus:outline-none">
+          <Link to="/create" className="font-semibold text-gray-800 hover:bg-purple-50 hover:text-blue-600 transition-colors px-4 py-2 rounded-lg hover:shadow-lg focus:outline-none">
             Разместить объявление
           </Link>
-          <Link to="/messages" className="font-semibold text-gray-800 hover:bg-purple-50 hover:text-blue-600 transition-colors px-4 py-2 rounded-lg focus:outline-none">
+          <Link to="/messages" className="font-semibold text-gray-800 hover:bg-purple-50 hover:text-blue-600 transition-colors px-4 py-2 rounded-lg hover:shadow-lg focus:outline-none">
             Сообщения
           </Link>
         </nav>

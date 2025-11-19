@@ -43,8 +43,8 @@ export default function SkillGrid() {
             </p>
           </div>
           
-          <button className="w-full mt-4 bg-green-500 text-white py-3 rounded-lg 
-                           hover:bg-green-600 transition-colors font-semibold 
+          <button className="w-full mt-4 bg-blue-500 text-white py-3 rounded-lg 
+                           hover:bg-blue-700 transition-colors font-semibold 
                            shadow-md hover:shadow-md">
             Предложить обмен
           </button>

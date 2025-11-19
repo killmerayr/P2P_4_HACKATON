@@ -25,7 +25,7 @@ export default function Login() {
 
                 <p className="text-center mt-2 text-gray-700 px-2 py-2">
                     Нет акаунта?
-                    <Link to="/register" className="text-blue-600 tounded-lg transition font-semibold px-2 py-1 ml-1 focus:outline-none">
+                    <Link to="/register" className="text-semibold text-blue-600 hover:underline ml-1 px-1">
                      Зарегистрироваться 
                     </Link>
                 </p>
