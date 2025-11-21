@@ -106,7 +106,7 @@ class AdvancedQueue:
 # Создаем экземпляр очереди
 queue_system = AdvancedQueue()
 
-# 🎯 API для участников
+# API для участников
 @app.route('/api/join', methods=['POST'])
 def api_join():
     data = request.json
@@ -151,7 +151,7 @@ def api_leave(queue_id):
     else:
         return jsonify({'error': 'Участник не найден'}), 404
 
-# 🎯 API для организаторов
+# API для организаторов
 @app.route('/api/admin/queue')
 def admin_queue():
     info = queue_system.get_queue_info()
@@ -187,7 +187,7 @@ def add_test_data():
     queue_system.add_test_data()
     return jsonify({'success': True, 'message': 'Тестовые данные добавлены'})
 
-# 🏠 Улучшенная главная страница с тестированием
+# главная страница с тестированием
 @app.route('/')
 def home():
     return """
