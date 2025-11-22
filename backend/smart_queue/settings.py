@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'accounts',
     'queue_app',
+    'channels', # notific
     'notifications',
 ]
 
@@ -63,9 +64,13 @@ CORS_ALLOWED_ORIGINS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication', #notific
+        'rest_framework.authentication.BasicAuthentication', #notific
     ),
+    'DEFAULT_PERMISSION_CLASSES': [ #notific
+        'rest_framework.permissions.IsAuthenticated',
+    ],
 }
-
 ROOT_URLCONF = 'smart_queue.urls'
 
 TEMPLATES = [
@@ -139,3 +144,21 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.Creator'
+
+#надставка для notifications
+ASGI_APPLICATION = 'your_project.asgi.application' # Channels
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
+
+# CORS CONFIGURATION
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5174",  #  ваш React фронтенд 
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+# Дополнительно можно разрешить все локальные порты для разработки:
+CORS_ALLOW_ALL_ORIGINS = True 
