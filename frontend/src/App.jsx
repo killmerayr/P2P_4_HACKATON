@@ -14,6 +14,7 @@ import MyRegistrations from './pages/MyRegistrations';
 import EventDetails from './pages/EventDetails';
 import AdminPanel from './pages/AdminPanel';
 import ProtectedRoute from './components/ProtectedRoute';
+import Queues from './pages/Queues';
 
 // Чаты
 import ParticipantChatPage from './pages/chat/ParticipantChatPage';
@@ -98,6 +99,7 @@ export default function App() {
               </ProtectedRoute>
             } />
 
+            <Route path='/queues' element={<Queues />} />
             {/* Публичные */}
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />

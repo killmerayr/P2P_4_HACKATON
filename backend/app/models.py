@@ -4,6 +4,15 @@ import uuid
 from django.utils import timezone
 import time
 
+class Event(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    date = models.DateTimeField()
+    
+    def __str__(self):
+        return self.title
+
+
 class User(AbstractUser):
     username = models.CharField(unique=True, max_length=50)
     email = models.EmailField(unique=True)

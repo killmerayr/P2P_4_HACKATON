@@ -99,7 +99,11 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
 }
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # фронт dev
+]
+
 # Custom user model
 AUTH_USER_MODEL = 'app.User'
 
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_ALL_ORIGINS = True
