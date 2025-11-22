@@ -3,16 +3,9 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework import generics
-from .models import Event
-from .serializers import EventSerializer
 from django.shortcuts import get_object_or_404
 from .serializers import *
 from .services.unified_queue import UnifiedQueueSystem
-
-class EventListView(generics.ListCreateAPIView):
-    queryset = Event.objects.all()
-    serializer_class = EventSerializer
 
 class AuthViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]

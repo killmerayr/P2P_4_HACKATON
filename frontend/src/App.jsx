@@ -22,23 +22,15 @@ import OrganizerChatPage from './pages/chat/OrganizerChatPage';
 
 // Хуки
 import { useNotificationChecker } from './hooks/useNotificationChecker';
-import { useEvents } from './hooks/useEvents';
 
 export default function App() {
-  const { checkNotifications, checkEventCapacity } = useNotificationChecker();
-  const { events } = useEvents();
+  const { checkNotifications } = useNotificationChecker();
 
   useEffect(() => {
     checkNotifications();
     const interval = setInterval(checkNotifications, 30000);
     return () => clearInterval(interval);
   }, [checkNotifications]);
-
-  useEffect(() => {
-    if (events.length > 0) {
-      checkEventCapacity(events);
-    }
-  }, [events, checkEventCapacity]);
 
   return (
     <AuthProvider>
