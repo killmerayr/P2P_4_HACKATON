@@ -8,6 +8,19 @@ export default function Header() {
     logout();
   };
 
+  const handleCreateEventClick = (e) => {
+    if (!user) {
+      // Если не авторизован - ничего не делаем, Link сам переведет на /login
+      return;
+    }
+    
+    if (user.role !== 'admin') {
+      // Если обычный пользователь - показываем сообщение и блокируем переход
+      e.preventDefault();
+      alert('Только организаторы могут создавать мероприятия');
+    }
+  };
+
   return (
     <header className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-4">
@@ -23,9 +36,31 @@ export default function Header() {
             <Link to="/events" className="font-semibold text-gray-800 hover:bg-yellow-200 transition px-4 py-2 rounded-lg outline-none">
               Мероприятия
             </Link>
-            <Link to="/create-event" className="font-semibold text-gray-800 hover:bg-yellow-200 transition px-4 py-2 rounded-lg outline-none">
-              Создать мероприятие
-            </Link>
+            
+            {/* Умная кнопка "Создать мероприятие" */}
+            {user ? (
+              user.role === 'admin' ? (
+                <Link to="/create-event" className="font-semibold text-gray-800 hover:bg-yellow-200 transition px-4 py-2 rounded-lg outline-none">
+                  Создать мероприятие
+                </Link>
+              ) : (
+                <button 
+                  onClick={() => alert('Только организаторы могут создавать мероприятия')}
+                  className="font-semibold text-gray-800 hover:bg-yellow-200 transition px-4 py-2 rounded-lg outline-none opacity-50 cursor-not-allowed"
+                  title="Только для организаторов"
+                >
+                  Создать мероприятие
+                </button>
+              )
+            ) : (
+              <Link 
+                to="/login" 
+                className="font-semibold text-gray-800 hover:bg-yellow-200 transition px-4 py-2 rounded-lg outline-none"
+              >
+                Создать мероприятие
+              </Link>
+            )}
+            
             <Link to="/my-registrations" className="font-semibold text-gray-800 hover:bg-yellow-200 transition px-4 py-2 rounded-lg outline-none">
               Мои записи
             </Link>

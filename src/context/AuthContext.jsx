@@ -23,49 +23,54 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        //заменишь на authAPI.getProfile()
-        const mockUser = {
-          id: 1,
-          name: 'Администратор',
-          email: 'admin@example.com',
-          role: 'admin' //для теста админки
-        };
-        setUser(mockUser);
-        
-        //заменишь на:
-        // const response = await authAPI.getProfile();
-        // setUser(response.data);
+        // Временная заглушка - можно оставить как админ по умолчанию
+        // или определить роль из localStorage
+        const savedUser = localStorage.getItem('user');
+        if (savedUser) {
+          setUser(JSON.parse(savedUser));
+        } else {
+          const mockUser = {
+            id: 1,
+            name: 'Администратор',
+            email: 'admin@eventhub.ru',
+            role: 'admin'
+          };
+          setUser(mockUser);
+        }
       } catch (error) {
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
       }
     }
     setLoading(false);
   };
 
   const login = async (credentials) => {
-    // ВРЕМЕННАЯ ЗАГЛУШКА
+    // Определяем роль по email
+    let userRole = 'user';
+    let userName = 'Участник EventHub';
+    
+    if (credentials.email === 'admin@eventhub.ru') {
+      userRole = 'admin';
+      userName = 'Организатор EventHub';
+    }
+
     const mockUser = {
-      id: 1,
-      name: 'Администратор',
+      id: userRole === 'admin' ? 1 : 2,
+      name: userName,
       email: credentials.email,
-      role: 'admin'
+      role: userRole
     };
     const mockToken = 'mock-jwt-token';
     
     localStorage.setItem('token', mockToken);
+    localStorage.setItem('user', JSON.stringify(mockUser)); // Сохраняем пользователя
     setUser(mockUser);
     return mockUser;
-    
-    //заменишь на:
-    // const response = await authAPI.login(credentials);
-    // const { token, user } = response.data;
-    // localStorage.setItem('token', token);
-    // setUser(user);
-    // return user;
   };
 
   const register = async (userData) => {
-    // aналогичная заглушка для регистрации
+    // Все новые пользователи - обычные участники
     const mockUser = {
       id: Date.now(),
       name: userData.name,
@@ -75,12 +80,14 @@ export const AuthProvider = ({ children }) => {
     const mockToken = 'mock-jwt-token';
     
     localStorage.setItem('token', mockToken);
+    localStorage.setItem('user', JSON.stringify(mockUser));
     setUser(mockUser);
     return mockUser;
   };
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setUser(null);
   };
 

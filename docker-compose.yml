@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: .
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:3001
+    command: npm run dev -- --host
+
+  backend:
+    image: node:18-alpine
+    working_dir: /app
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend:/app
+    command: sh -c "cd backend && npm install && npm start"
+    depends_on:
+      - database
+
+  database:
+    image: nouchka/sqlite3
+    volumes:
+      - ./data:/data
