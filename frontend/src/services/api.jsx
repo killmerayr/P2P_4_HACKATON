@@ -31,16 +31,4 @@ export const queueAPI = {
   getQueueStatus: (queueId) => api.get(`/queues/${queueId}/status`)
 };
 
-// API для мероприятий
-export const eventAPI = {
-  getAllEvents: () => api.get("/events"),
-  getEvent: (id) => api.get(`/events/${id}`),
-  createEvent: (data) => api.post("/events", data),
-  updateEvent: (id, data) => api.put(`/events/${id}`, data),
-  deleteEvent: (id) => api.delete(`/events/${id}`),
-  getMyRegistrations: () => api.get("/registrations"),
-  registerForEvent: (eventId) => api.post("/registrations", { eventId }),
-  cancelRegistration: (registrationId) => api.delete(`/registrations/${registrationId}`)
-};
-
 export default api;

@@ -1,26 +1,8 @@
 import { Link } from 'react-router-dom';
 // import { eventAPI } from '../services/api'; //
-import { useState } from 'react';
 
 export default function EventCard({ event }) {
   const participationPercent = (event.participants / event.maxParticipants) * 100;
-  const [isLoading, setIsLoading] = useState(false);
-  const [isRegistered, setIsRegistered] = useState(false);
-
-  const handleRegister = async () => {
-    if (isLoading) return;
-    
-    setIsLoading(true);
-    try {
-      await eventAPI.registerForEvent(event.id);
-      alert('✅ Вы успешно записались на мероприятие!');
-    } catch (error) {
-      console.error('Ошибка записи:', error);
-      alert('❌ Не удалось записаться. Попробуйте позже.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const checkRegistration = () => {
     return event.id % 2 === 0;
