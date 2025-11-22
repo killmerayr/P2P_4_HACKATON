@@ -9,7 +9,7 @@ def test_page(request):
     <!DOCTYPE html>
     <html>
     <head>
-        <title>🚀 Система очереди - Автоматическое завершение</title>
+        <title>🚀 Система очереди </title>
         <style>
             body { font-family: Arial, sans-serif; margin: 40px; }
             .section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
@@ -21,8 +21,7 @@ def test_page(request):
         </style>
     </head>
     <body>
-        <h1>🚀 Система очереди - Автоматическое завершение</h1>
-        <p><strong>Логика:</strong> При нажатии "Следующий" предыдущий участник автоматически завершается!</p>
+        <h1>🚀 Система очереди</h1>
         
         <div class="section">
             <h2>🧪 Тестовые данные</h2>
@@ -106,7 +105,6 @@ def test_page(request):
                             '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
                     });
             }
-            
             function viewQueue() {
                 console.log("Запрос к /queue/api/admin/queue");
                 
@@ -136,7 +134,8 @@ def test_page(request):
                         html += `<div class="result">
                             <strong>📈 Общая информация:</strong><br>
                             👥 Всего в очереди: ${result.total_waiting} человек<br>
-                            ⏱️ Ожидание: ${result.estimated_wait_times?.first || 3}-${result.estimated_wait_times?.last || 0} мин
+                            ⏱️ Ожидание: ${Math.round(result.estimated_wait_times?.first || 0)}-${Math.round(result.estimated_wait_times?.last || 0)} мин<br>
+                            📊 Среднее время: ${Math.round(result.avg_processing_time || 3)} мин/чел
                         </div>`;
                         
                         // Детальный список очереди
@@ -148,7 +147,7 @@ def test_page(request):
                                 html += `<div style="margin: 8px 0; padding: 10px; border-left: 4px solid #28a745; background: #f8f9fa; border-radius: 4px;">
                                     <strong>#${participant.position}</strong> 👤 ${participant.name}<br>
                                     ${participant.email ? '📧 ' + participant.email : '<span style="color: #666;">📧 почта не указана</span>'}<br>
-                                    <small style="color: #666;">⏰ ожидание: ${participant.estimated_wait} мин</small>
+                                    <small style="color: #666;">⏰ ожидание: ${Math.round(participant.estimated_wait)} мин</small>
                                 </div>`;
                             });
                         } else {
