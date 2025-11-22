@@ -1,0 +1,17 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Копируем только package файлы сначала (для кеширования)
+COPY package*.json ./
+
+# Устанавливаем зависимости
+RUN npm ci
+
+# Копируем остальные файлы
+COPY . .
+
+EXPOSE 5173
+
+# Запускаем dev сервер
+CMD ["npm", "run", "dev", "--", "--host"]
