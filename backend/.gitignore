@@ -1,0 +1,73 @@
+# Byte-compiled
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual env
+venv/
+env/
+.venv/
+
+# Django stuff
+*.log
+db.sqlite3
+media/
+static/
+staticfiles/
+
+# Environment variables
+.env
+
+# PyCharm / VSCode settings
+.idea/
+.vscode/
+
+# ===== NODE / REACT =====
+
+# Node modules
+node_modules/
+
+# Production build
+build/
+dist/
+
+# Environment variables
+*.env
+
+# Cache files
+=======
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ===== OS / MISC =====
+
+.DS_Store
+Thumbs.db
+
+# Python packaging
+*.egg-info/
+build/
+dist/
+=======
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
