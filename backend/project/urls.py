@@ -3,9 +3,6 @@ from django.urls import path, include
 from django.shortcuts import render
 from django.http import HttpResponse
 
-def database_menu(request):
-    return render(request, 'menu.html')
-
 def api_info(request):
     """Информация о API"""
     info = """
@@ -96,5 +93,4 @@ urlpatterns = [
     path('api/', include('app.urls')),
     path('api-info/', api_info, name='api-info'),
     path('health/', health_check, name='health'),
-    path('', database_menu, name='home'),
 ]

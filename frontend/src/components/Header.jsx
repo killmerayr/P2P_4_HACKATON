@@ -25,7 +25,7 @@ export default function Header() {
             )}
             <Link to="/my-registrations" className="hover:text-yellow-600 transition">Мои записи</Link>
             {user.role === 'admin' && <Link to="/organizer/chat" className="hover:text-yellow-600 transition">Чаты</Link>}
-            {user.role === 'user' && <Link to="/events" className="hover:text-yellow-600 transition">Мои чаты</Link>}
+            {/* Убрали "Мои чаты" для обычных пользователей */}
             {user.role === 'admin' && <Link to="/admin" className="hover:text-yellow-600 transition">Аккаунт</Link>}
           </nav>
         )}
@@ -34,10 +34,12 @@ export default function Header() {
         <div className="flex items-center gap-4">
           {user ? (
             <>
-              <span className="text-gray-700 whitespace-nowrap">Привет, {user.name}!</span>
+              <span className="text-gray-700 whitespace-nowrap">
+                Привет, {user.username || user.name || user.email?.split('@')[0]}!
+              </span>
               {user.role === 'admin' && <span className="bg-red-500 text-white px-2 py-1 rounded text-sm">ADMIN</span>}
               {user.role === 'user' && <span className="bg-blue-500 text-white px-2 py-1 rounded text-sm">УЧАСТНИК</span>}
-              <button 
+              <button
                 onClick={logout}
                 className="bg-stone-600 text-white px-5 py-2 rounded-lg hover:bg-stone-700 transition"
               >
