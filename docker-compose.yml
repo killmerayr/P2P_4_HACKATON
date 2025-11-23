@@ -19,5 +19,5 @@ services:
       - ./frontend:/app
       - /app/node_modules
     environment:
-      - VITE_API_URL=http://localhost:8000  # ← Исправлено на backend
+      - VITE_API_URL=http://backend:8000  # ← Исправлено на backend
     command: npm run dev -- --host

@@ -18,8 +18,9 @@ export default function Login() {
     try {
       await login(formData);
       navigate('/');
-    } catch (error) {
+    } catch (err) {
       alert('Ошибка входа');
+      console.error('Login error:', err);
     } finally {
       setLoading(false);
     }
@@ -32,16 +33,31 @@ export default function Login() {
     });
   };
 
+  // Helper function to auto-login with credentials
+  const autoLogin = async (credentials) => {
+    setFormData(credentials);
+    setLoading(true);
+    try {
+      await login(credentials);
+      navigate('/');
+    } catch (err) {
+      alert('Ошибка входа');
+      console.error('Login error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Функции для быстрого заполнения тестовых данных
   const fillAdminCredentials = () => {
-    setFormData({
+    autoLogin({
       email: 'admin@eventhub.ru',
       password: 'admin123'
     });
   };
 
   const fillUserCredentials = () => {
-    setFormData({
+    autoLogin({
       email: 'user@eventhub.ru',
       password: 'user123'
     });

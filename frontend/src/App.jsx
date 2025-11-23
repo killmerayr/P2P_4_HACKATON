@@ -4,7 +4,7 @@ import { Toaster } from 'react-hot-toast';
 
 import { AuthProvider } from './context/AuthContext';
 import Header from './components/Header';
-import EventGrid from './components/EventGrid';
+import QueueGrid from './components/QueueGrid';
 import Home from './pages/Home';
 import AllEvents from './pages/AllEvents';
 import CreateEvent from './pages/CreateEvent';
@@ -52,11 +52,11 @@ export default function App() {
           <Routes>
             <Route path='/' element={
               <main className='container mx-auto px-4 py-8'>
-                <h1 className='text-4xl font-bold text-center mb-6 text-gray-800'>Мероприятия</h1>
+                <h1 className='text-4xl font-bold text-center mb-6 text-gray-800'>Электронные очереди</h1>
                 <p className='text-center text-gray-950 mb-12 max-w-2xl mx-auto text-lg leading-relaxed'>
-                  Открывай новые возможности, находи единомышленников и участвуй в событиях 
+                  Удобное управление очередями и запись на услуги
                 </p>
-                <EventGrid />
+                <QueueGrid />
               </main>
             } />
             
