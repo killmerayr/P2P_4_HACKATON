@@ -1,6 +1,6 @@
-import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -18,8 +18,14 @@ export default function Login() {
     setLoading(true);
 
     try {
-      await login(formData);
-      navigate('/');
+      const user = await login(formData);
+
+      // Перенаправляем в зависимости от роли
+      if (user.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
     } catch (err) {
       console.error('Login error:', err);
       setError('Неверный email или пароль');

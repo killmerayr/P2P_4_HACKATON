@@ -40,6 +40,8 @@ export default function Register() {
         password: formData.password
       };
 
+      let user = null;
+
       // Use different endpoint for organizers
       if (userType === 'organizer') {
         // Для организатора требуется токен
@@ -58,7 +60,8 @@ export default function Register() {
         const token = response.data.token || response.data.access;
         if (token) {
           localStorage.setItem('token', token);
-          localStorage.setItem('user', JSON.stringify(response.data.user || response.data.owner));
+          user = response.data.user || response.data.owner;
+          localStorage.setItem('user', JSON.stringify(user));
         }
       } else {
         // Для участника требуется имя
@@ -70,12 +73,17 @@ export default function Register() {
         const token = response.data.access || response.data.token;
         if (token) {
           localStorage.setItem('token', token);
-          localStorage.setItem('user', JSON.stringify(response.data.user));
+          user = response.data.user;
+          localStorage.setItem('user', JSON.stringify(user));
         }
       }
 
-      // Redirect to home
-      navigate('/');
+      // Redirect based on user type
+      if (userType === 'organizer') {
+        navigate('/admin');  // Организатор -> AdminPanel
+      } else {
+        navigate('/');  // Участник -> Главная
+      }
     } catch (err) {
       console.error('Registration error:', err);
       const errorMessage = err.response?.data?.error

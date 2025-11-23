@@ -89,11 +89,15 @@ def api_info(request):
 def health_check(request):
     return HttpResponse("🚀 Server is running!")
 
+def favicon(request):
+    return HttpResponse(status=204)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('app.urls')),
     path('api-info/', api_info, name='api-info'),
     path('health/', health_check, name='health'),
+    path('favicon.ico', favicon, name='favicon'),
 ]
 
 if settings.DEBUG:
