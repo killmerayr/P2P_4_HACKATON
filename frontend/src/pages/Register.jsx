@@ -46,17 +46,19 @@ export default function Register() {
         userData.organization = formData.organization;
         const response = await authAPI.registerOwner(userData);
         
-        // Save token and user info
-        if (response.data.token) {
-          localStorage.setItem('token', response.data.token);
+        // Save token and user info (organizer endpoint uses 'token' field)
+        const token = response.data.token || response.data.access;
+        if (token) {
+          localStorage.setItem('token', token);
           localStorage.setItem('user', JSON.stringify(response.data.user));
         }
       } else {
         const response = await authAPI.register(userData);
         
-        // Save token and user info
-        if (response.data.access) {
-          localStorage.setItem('token', response.data.access);
+        // Save token and user info (participant endpoint uses 'access' field)
+        const token = response.data.access || response.data.token;
+        if (token) {
+          localStorage.setItem('token', token);
           localStorage.setItem('user', JSON.stringify(response.data.user));
         }
       }

@@ -33,15 +33,9 @@ export default function Login() {
     });
   };
 
-  // Функции для быстрого заполнения тестовых данных
-  const fillAdminCredentials = async () => {
-    const credentials = {
-      email: 'admin@eventhub.ru',
-      password: 'admin123'
-    };
+  // Helper function to auto-login with credentials
+  const autoLogin = async (credentials) => {
     setFormData(credentials);
-    
-    // Auto-submit
     setLoading(true);
     try {
       await login(credentials);
@@ -54,24 +48,19 @@ export default function Login() {
     }
   };
 
-  const fillUserCredentials = async () => {
-    const credentials = {
+  // Функции для быстрого заполнения тестовых данных
+  const fillAdminCredentials = () => {
+    autoLogin({
+      email: 'admin@eventhub.ru',
+      password: 'admin123'
+    });
+  };
+
+  const fillUserCredentials = () => {
+    autoLogin({
       email: 'user@eventhub.ru',
       password: 'user123'
-    };
-    setFormData(credentials);
-    
-    // Auto-submit
-    setLoading(true);
-    try {
-      await login(credentials);
-      navigate('/');
-    } catch (err) {
-      alert('Ошибка входа');
-      console.error('Login error:', err);
-    } finally {
-      setLoading(false);
-    }
+    });
   };
 
   return (

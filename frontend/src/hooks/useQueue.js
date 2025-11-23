@@ -1,5 +1,5 @@
 // src/hooks/useQueue.js
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { queueAPI } from "../services/api";
 
 export const useQueue = (queueId) => {
@@ -7,7 +7,7 @@ export const useQueue = (queueId) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchQueue = async () => {
+  const fetchQueue = useCallback(async () => {
     if (!queueId) return;
     
     try {
@@ -21,7 +21,7 @@ export const useQueue = (queueId) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [queueId]);
 
   const joinQueue = async (data) => {
     try {
@@ -59,8 +59,7 @@ export const useQueue = (queueId) => {
     if (queueId) {
       fetchQueue();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queueId]);
+  }, [queueId, fetchQueue]);
 
   return { 
     queue, 
