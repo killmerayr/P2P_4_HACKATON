@@ -12,7 +12,7 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.dev 
+      dockerfile: Dockerfile.dev
     ports:
       - "5173:5173"
     volumes:
