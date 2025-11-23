@@ -32,6 +32,25 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_HEADERS = [
+    'content-type',
+    'authorization',
+    'x-csrftoken',
+    'x-requested-with',
+]
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
 ROOT_URLCONF = 'project.urls'
 
 TEMPLATES = [
@@ -101,5 +120,3 @@ SIMPLE_JWT = {
 
 # Custom user model
 AUTH_USER_MODEL = 'app.User'
-
-CORS_ALLOW_ALL_ORIGINS = True
