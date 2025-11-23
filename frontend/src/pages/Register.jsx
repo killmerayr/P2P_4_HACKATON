@@ -6,10 +6,10 @@ export default function Register() {
   const [userType, setUserType] = useState('participant');
   const [formData, setFormData] = useState({
     name: '',
+    token: '',
     email: '',
     password: '',
-    confirmPassword: '',
-    organization: ''
+    confirmPassword: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -23,80 +23,77 @@ export default function Register() {
   };
 
   const handleSubmit = async (e) => {
-      e.preventDefault();
-      setError('');
+    e.preventDefault();
+    setError('');
 
-      // Validate passwords match
-      if (formData.password !== formData.confirmPassword) {
-        setError('Пароли не совпадают');
-        return;
-      }
+    // Validate passwords match
+    if (formData.password !== formData.confirmPassword) {
+      setError('Пароли не совпадают');
+      return;
+    }
 
-      setLoading(true);
+    setLoading(true);
 
-      try {
-        const userData = {
-          username: formData.name,  // ← ИСПРАВЛЕНО: было name
-          email: formData.email,
-          password: formData.password
-        };
+    try {
+      const userData = {
+        email: formData.email,
+        password: formData.password
+      };
 
-        // Use different endpoint for organizers
-        if (userType === 'organizer') {
-          userData.name = formData.organization;  // Добавляем организацию
-          const response = await authAPI.registerOwner(userData);
-
-          // Save token and user info
-          const token = response.data.token || response.data.access;
-          if (token) {
-            localStorage.setItem('token', token);
-            localStorage.setItem('user', JSON.stringify(response.data.owner || response.data.user));
-          }
-        } else {
-          const response = await authAPI.register(userData);
-
-          // Save token and user info
-          const token = response.data.access || response.data.token;
-          if (token) {
-            localStorage.setItem('token', token);
-            localStorage.setItem('user', JSON.stringify(response.data.user));
-          }
+      // Use different endpoint for organizers
+      if (userType === 'organizer') {
+        // Для организатора требуется токен
+        if (!formData.token) {
+          setError('Токен обязателен для регистрации организатора');
+          setLoading(false);
+          return;
         }
 
-        // Redirect to home
-        navigate('/');
-      } catch (err) {
-        console.error('Registration error:', err);
+        userData.token = formData.token;
+        userData.name = formData.name;
 
-        // Показать детальную ошибку
-        const errorData = err.response?.data;
-        let errorMessage = 'Ошибка регистрации. Попробуйте снова.';
+        const response = await authAPI.registerOwner(userData);
 
-        if (errorData) {
-          if (typeof errorData === 'string') {
-            errorMessage = errorData;
-          } else if (errorData.username) {
-            errorMessage = `Username: ${errorData.username[0]}`;
-          } else if (errorData.email) {
-            errorMessage = `Email: ${errorData.email[0]}`;
-          } else if (errorData.password) {
-            errorMessage = `Password: ${errorData.password[0]}`;
-          } else if (errorData.message || errorData.error) {
-            errorMessage = errorData.message || errorData.error;
-          }
+        // Save token and user info
+        const token = response.data.token || response.data.access;
+        if (token) {
+          localStorage.setItem('token', token);
+          localStorage.setItem('user', JSON.stringify(response.data.user || response.data.owner));
         }
+      } else {
+        // Для участника требуется имя
+        userData.name = formData.name;
 
-        setError(errorMessage);
-      } finally {
-        setLoading(false);
+        const response = await authAPI.register(userData);
+
+        // Save token and user info
+        const token = response.data.access || response.data.token;
+        if (token) {
+          localStorage.setItem('token', token);
+          localStorage.setItem('user', JSON.stringify(response.data.user));
+        }
       }
+
+      // Redirect to home
+      navigate('/');
+    } catch (err) {
+      console.error('Registration error:', err);
+      const errorMessage = err.response?.data?.error
+        || err.response?.data?.message
+        || err.response?.data?.token?.[0]
+        || err.response?.data?.email?.[0]
+        || 'Ошибка регистрации. Попробуйте снова.';
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-white to-yellow-300 flex items-center justify-center">
       <div className="bg-white p-8 rounded-xl shadow-lg max-w-md w-full">
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Регистрация</h2>
-        
+
         {error && (
           <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
             {error}
@@ -130,15 +127,41 @@ export default function Register() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            name="name"
-            placeholder="Имя"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-yellow-500"
-            required
-          />
+          {/* Поле для организаторов - ТОКЕН */}
+          {userType === 'organizer' ? (
+            <>
+              <input
+                type="text"
+                name="token"
+                placeholder="Токен организатора (UUID)"
+                value={formData.token}
+                onChange={handleChange}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-yellow-500"
+                required
+              />
+              <input
+                type="text"
+                name="name"
+                placeholder="Ваше имя"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-yellow-500"
+                required
+              />
+            </>
+          ) : (
+            /* Поле для участников - ИМЯ */
+            <input
+              type="text"
+              name="name"
+              placeholder="Ваше имя"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-yellow-500"
+              required
+            />
+          )}
+
           <input
             type="email"
             name="email"
@@ -148,19 +171,6 @@ export default function Register() {
             className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-yellow-500"
             required
           />
-          
-          {/* Дополнительное поле для организаторов */}
-          {userType === 'organizer' && (
-            <input
-              type="text"
-              name="organization"
-              placeholder="Название организации или клуба"
-              value={formData.organization}
-              onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-yellow-500"
-              required
-            />
-          )}
           
           <input
             type="password"

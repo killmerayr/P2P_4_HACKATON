@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from .models import (User, Owner, Queue, Participant)
 from django.contrib.auth.hashers import make_password
+from .models import *
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,56 +11,58 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField(required=False)
-    email = serializers.EmailField(required=False)
-    password = serializers.CharField()
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        username = data.get('username')
-        email = data.get('email')
-        password = data.get('password')
-
-        if not (username or email):
-            raise serializers.ValidationError('Необходимо указать username или email')
-
-        if not password:
-            raise serializers.ValidationError('Необходимо указать password')
-
-        # Попытка входа по username или email
-        user = None
-        if username:
-            user = authenticate(username=username, password=password)
-        elif email:
-            try:
-                user_obj = User.objects.get(email=email)
-                user = authenticate(username=user_obj.username, password=password)
-            except User.DoesNotExist:
-                pass
-
-        if user:
-            if user.is_active:
-                data['user'] = user
-            else:
-                raise serializers.ValidationError('Аккаунт отключен')
-        else:
+        # Ищем пользователя по email
+        try:
+            user_obj = User.objects.get(email=data['email'])
+            username = user_obj.username
+        except User.DoesNotExist:
             raise serializers.ValidationError('Неверные учетные данные')
 
+        user = authenticate(username=username, password=data['password'])
+        if not user:
+            raise serializers.ValidationError('Неверные учетные данные')
+        data['user'] = user
         return data
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
+    name = serializers.CharField(write_only=True, required=True)
+    password = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password')
+        fields = ('id', 'name', 'email', 'password', 'username')
+        extra_kwargs = {
+            'username': {'read_only': True}
+        }
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError('Этот email уже используется')
+        return value
 
     def create(self, validated_data):
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password'],
+        name = validated_data.pop('name')
+        email = validated_data['email']
 
+        # Используем email как username (часть до @)
+        username = email.split('@')[0]
+
+        # Если username существует, добавляем номер
+        base_username = username
+        counter = 1
+        while User.objects.filter(username=username).exists():
+            username = f"{base_username}{counter}"
+            counter += 1
+
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=validated_data['password'],
         )
         return user
 
@@ -71,14 +74,30 @@ class OwnerSerializer(serializers.ModelSerializer):
         model = Owner
         fields = ['token', 'name', 'email', 'password', 'is_active', 'created_at', 'token_id']
         read_only_fields = ['token', 'is_active', 'created_at']
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
 
 
 class OwnerRegisterSerializer(serializers.ModelSerializer):
-    token = serializers.UUIDField()
+    token = serializers.UUIDField(required=True)  # Токен ОБЯЗАТЕЛЕН
 
     class Meta:
         model = Owner
         fields = ['token', 'name', 'email', 'password']
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'name': {'required': True},
+            'email': {'required': True}
+        }
+
+    def validate_email(self, value):
+        # Проверяем уникальность email
+        if Owner.objects.filter(email=value, is_active=True).exists():
+            raise serializers.ValidationError('Этот email уже используется')
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError('Этот email уже используется')
+        return value
 
     def validate_token(self, value):
         try:
@@ -87,59 +106,32 @@ class OwnerRegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Неверный токен или токен уже использован')
         return value
 
-    def validate(self, data):
-        # Проверяем email только если он не пустой в существующих записях
-        if Owner.objects.filter(email=data['email']).exclude(email__isnull=True).exclude(email='').exists():
-            raise serializers.ValidationError({'email': 'Этот email уже используется'})
-        return data
-
     def create(self, validated_data):
         token = validated_data['token']
-        owner = Owner.objects.get(token=token)
 
-        owner.name = validated_data['name']
-        owner.email = validated_data['email']
-        owner.password = make_password(validated_data['password'])
-        owner.is_active = True
-        owner.save()
+        try:
+            owner = Owner.objects.get(token=token, is_active=False)
+            owner.name = validated_data['name']
+            owner.email = validated_data['email']
+            owner.password = make_password(validated_data['password'])
+            owner.is_active = True
+            owner.save()
+            return owner
+        except Owner.DoesNotExist:
+            raise serializers.ValidationError({'token': 'Неверный токен или токен уже использован'})
 
-        return owner
-
-class ParticipantSerializer(serializers.ModelSerializer):
-    queue_name = serializers.CharField(source='queue.name', read_only=True)
-    estimated_wait_minutes = serializers.IntegerField(source='estimated_wait', read_only=True)
-
-    class Meta:
-        model = Participant
-        fields = '__all__'
-        read_only_fields = ['position', 'joined_at', 'participant_id', 'estimated_wait']
 
 class QueueSerializer(serializers.ModelSerializer):
-    participants = ParticipantSerializer(many=True, read_only=True)
-    owner = OwnerSerializer(read_only=True)
-    current_waiting = serializers.SerializerMethodField()
-    start_at = serializers.IntegerField(read_only=True)
-
-    # Новые поля
-    estimated_wait_display = serializers.SerializerMethodField()
-    is_active = serializers.BooleanField(source='status', read_only=True)
+    owner_name = serializers.CharField(source='owner.name', read_only=True)
 
     class Meta:
         model = Queue
         fields = '__all__'
-        read_only_fields = ['start_at', 'served_count', 'fullness']
 
-    def get_current_waiting(self, obj):
-        return obj.participants.filter(status='waiting').count()
 
-    def get_estimated_wait_display(self, obj):
-        waiting = obj.participants.filter(status='waiting').order_by('position')
-        if not waiting:
-            return "0 мин"
+class ParticipantSerializer(serializers.ModelSerializer):
+    queue_name = serializers.CharField(source='queue.name', read_only=True)
 
-        first_wait = waiting[0].estimated_wait
-        last_wait = waiting[len(waiting) - 1].estimated_wait
-
-        if first_wait == last_wait or len(waiting) == 1:
-            return f"{first_wait} мин"
-        return f"{first_wait}-{last_wait} мин"
+    class Meta:
+        model = Participant
+        fields = '__all__'
