@@ -13,7 +13,6 @@ export default function CreateEvent() {
     contactInfo: ''
   });
 
-  // УБЕРИ лишнюю функцию - у тебя две handleSubmit
   // const handleSumbit = async (formData) => {
   //   try {
   //     await eventAPI.createEvent(formData);
