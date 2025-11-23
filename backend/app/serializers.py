@@ -80,7 +80,7 @@ class OwnerSerializer(serializers.ModelSerializer):
 
 
 class OwnerRegisterSerializer(serializers.ModelSerializer):
-    token = serializers.UUIDField(required=True)  # Токен ОБЯЗАТЕЛЕН
+    token = serializers.UUIDField(required=True)  # Токен обязателен
 
     class Meta:
         model = Owner
