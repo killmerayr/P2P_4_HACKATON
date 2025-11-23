@@ -7,6 +7,7 @@ router.register(r'auth', AuthViewSet, basename='auth')
 router.register(r'queues', QueueViewSet, basename='queues')
 router.register(r'participants', ParticipantViewSet, basename='participants')
 router.register(r'owners', OwnerViewSet, basename='owners')
+
 urlpatterns = [
     path('', include(router.urls)),
 ]

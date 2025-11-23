@@ -1,50 +1,73 @@
-import { useState } from "react";
-import { queueAPI } from "../api";
+// src/hooks/useQueue.js
+import { useState, useEffect, useCallback } from "react";
+import { queueAPI } from "../services/api";
 
-export const useQueue = () => {
-  const [queues, setQueues] = useState([]);
-  const [loading, setLoading] = useState(false);
+export const useQueue = (queueId) => {
+  const [queue, setQueue] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchQueues = async () => {
-    setLoading(true);
+  const fetchQueue = useCallback(async () => {
+    if (!queueId) return;
+    
     try {
-      const { data } = await queueAPI.getAllQueues();
-      setQueues(data);
+      setLoading(true);
+      const res = await queueAPI.getQueue(queueId);
+      setQueue(res.data);
+      setError(null);
     } catch (err) {
-      setError(err.response?.data || err.message);
+      console.error("Ошибка загрузки очереди:", err);
+      setError(err.message || "Ошибка загрузки очереди");
     } finally {
       setLoading(false);
     }
-  };
+  }, [queueId]);
 
-  const createQueue = async (queueData) => {
+  const joinQueue = async (data) => {
     try {
-      const { data } = await queueAPI.createQueue(queueData);
-      setQueues(prev => [...prev, data]);
-      return data;
+      const res = await queueAPI.joinQueue(queueId, data);
+      await fetchQueue(); // Refresh queue data
+      return res.data;
     } catch (err) {
-      setError(err.response?.data || err.message);
+      console.error("Ошибка присоединения к очереди:", err);
+      throw err;
     }
   };
 
-  const joinQueue = async (id) => {
+  const getStatus = async () => {
     try {
-      await queueAPI.joinQueue(id);
-      await fetchQueues(); // обновляем список очередей
+      const res = await queueAPI.getQueueStatus(queueId);
+      return res.data;
     } catch (err) {
-      setError(err.response?.data || err.message);
+      console.error("Ошибка получения статуса очереди:", err);
+      throw err;
     }
   };
 
-  const serveNext = async (id) => {
+  const leaveQueue = async (participantId) => {
     try {
-      await queueAPI.serveNext(id);
-      await fetchQueues();
+      const res = await queueAPI.leaveQueue(queueId, participantId);
+      await fetchQueue(); // Refresh queue data
+      return res.data;
     } catch (err) {
-      setError(err.response?.data || err.message);
+      console.error("Ошибка выхода из очереди:", err);
+      throw err;
     }
   };
 
-  return { queues, loading, error, fetchQueues, createQueue, joinQueue, serveNext };
+  useEffect(() => {
+    if (queueId) {
+      fetchQueue();
+    }
+  }, [queueId, fetchQueue]);
+
+  return { 
+    queue, 
+    loading, 
+    error, 
+    fetchQueue, 
+    joinQueue, 
+    getStatus, 
+    leaveQueue 
+  };
 };

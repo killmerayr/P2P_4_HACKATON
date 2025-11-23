@@ -7,8 +7,6 @@ from django.shortcuts import get_object_or_404
 from .serializers import *
 from .services.unified_queue import UnifiedQueueSystem
 
-
-
 class AuthViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
 

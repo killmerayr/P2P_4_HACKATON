@@ -4,7 +4,7 @@ import { Toaster } from 'react-hot-toast';
 
 import { AuthProvider } from './context/AuthContext';
 import Header from './components/Header';
-import EventGrid from './components/EventGrid';
+import QueueGrid from './components/QueueGrid';
 import Home from './pages/Home';
 import AllEvents from './pages/AllEvents';
 import CreateEvent from './pages/CreateEvent';
@@ -14,6 +14,7 @@ import MyRegistrations from './pages/MyRegistrations';
 import EventDetails from './pages/EventDetails';
 import AdminPanel from './pages/AdminPanel';
 import ProtectedRoute from './components/ProtectedRoute';
+import Queues from './pages/Queues';
 
 // Чаты
 import ParticipantChatPage from './pages/chat/ParticipantChatPage';
@@ -21,23 +22,15 @@ import OrganizerChatPage from './pages/chat/OrganizerChatPage';
 
 // Хуки
 import { useNotificationChecker } from './hooks/useNotificationChecker';
-import { useEvents } from './hooks/useEvents';
 
 export default function App() {
-  const { checkNotifications, checkEventCapacity } = useNotificationChecker();
-  const { events } = useEvents();
+  const { checkNotifications } = useNotificationChecker();
 
   useEffect(() => {
     checkNotifications();
     const interval = setInterval(checkNotifications, 30000);
     return () => clearInterval(interval);
   }, [checkNotifications]);
-
-  useEffect(() => {
-    if (events.length > 0) {
-      checkEventCapacity(events);
-    }
-  }, [events, checkEventCapacity]);
 
   return (
     <AuthProvider>
@@ -59,11 +52,11 @@ export default function App() {
           <Routes>
             <Route path='/' element={
               <main className='container mx-auto px-4 py-8'>
-                <h1 className='text-4xl font-bold text-center mb-6 text-gray-800'>Мероприятия</h1>
+                <h1 className='text-4xl font-bold text-center mb-6 text-gray-800'>Электронные очереди</h1>
                 <p className='text-center text-gray-950 mb-12 max-w-2xl mx-auto text-lg leading-relaxed'>
-                  Открывай новые возможности, находи единомышленников и участвуй в событиях 
+                  Удобное управление очередями и запись на услуги
                 </p>
-                <EventGrid />
+                <QueueGrid />
               </main>
             } />
             
@@ -98,6 +91,7 @@ export default function App() {
               </ProtectedRoute>
             } />
 
+            <Route path='/queues' element={<Queues />} />
             {/* Публичные */}
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />

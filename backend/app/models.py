@@ -4,6 +4,7 @@ import uuid
 from django.utils import timezone
 import time
 
+
 class User(AbstractUser):
     username = models.CharField(unique=True, max_length=50)
     email = models.EmailField(unique=True)

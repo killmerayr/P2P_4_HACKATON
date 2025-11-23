@@ -1,12 +1,25 @@
 import { useState } from 'react';
 import EventCard from '../components/EventCard';
-import { useEvents } from '../hooks/useEvents';
 
 export default function AllEvents() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   
-  const { events, loading } = useEvents(); // ← используем данные из хука
+  // Temporary mock data until Events feature is implemented
+  const events = [
+    {
+      id: 1,
+      title: "Хакатон по веб-разработке",
+      date: "15 декабря 2024",
+      time: "10:00 - 18:00",
+      location: "Главный корпус, ауд. 301", 
+      organizer: "IT-клуб НГТУ",
+      participants: 24,
+      maxParticipants: 30,
+      category: "Технологии"
+    }
+  ];
+  const loading = false;
 
   // Фильтрация мероприятий
   const filteredEvents = events.filter(event => {

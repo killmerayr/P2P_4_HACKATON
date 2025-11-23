@@ -1,33 +1,40 @@
 import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+<<<<<<< HEAD
+=======
+
+>>>>>>> cfe9e6f43f0452ffa08c65e07119ec700ba26b77
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  headers: { 'Content-Type': 'application/json' }
+  headers: { "Content-Type": "application/json" }
 });
 
+// Добавляем авторизацию для всех запросов
 api.interceptors.request.use(config => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
+// API для авторизации
 export const authAPI = {
-  login: (credentials) => api.post('/auth/login', credentials),
-  register: (userData) => api.post('/auth/register', userData),
-  getProfile: () => api.get('/auth/profile')
+  login: (credentials) => api.post("/auth/login/", credentials),
+  register: (userData) => api.post("/auth/register/", userData),
+  registerOwner: (userData) => api.post("/auth/register_owner/", userData),
+  getProfile: () => api.get("/auth/profile/")
 };
 
-export const eventAPI = {
-  getAllEvents: () => api.get('/events'),
-  getEvent: (id) => api.get(`/events/${id}`),
-  createEvent: (data) => api.post('/events', data),
-  updateEvent: (id, data) => api.put(`/events/${id}`, data),
-  deleteEvent: (id) => api.delete(`/events/${id}`),
-  getMyRegistrations: () => api.get('/registrations'),
-  registerForEvent: (eventId) => api.post('/registrations', { eventId }),
-  cancelRegistration: (registrationId) => api.delete(`/registrations/${registrationId}`)
+// API для очередей
+export const queueAPI = {
+  getAllQueues: () => api.get("/queues/"),
+  getQueue: (id) => api.get(`/queues/${id}/`),
+  joinQueue: (queueId, data) => api.post(`/queues/${queueId}/join/`, data),
+  serveNext: (queueId) => api.post(`/queues/${queueId}/serve_next/`),
+  getQueueStatus: (queueId) => api.get(`/queues/${queueId}/status/`),
+  getParticipantStatus: (queueId, participantId) => api.get(`/queues/${queueId}/participant_status/?participant_id=${participantId}`),
+  leaveQueue: (queueId, participantId) => api.post(`/queues/${queueId}/leave/`, { participant_id: participantId })
 };
 
 export default api;
