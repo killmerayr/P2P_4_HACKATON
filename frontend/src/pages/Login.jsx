@@ -33,7 +33,7 @@ export default function Login() {
     });
   };
 
-  // Helper function to auto-login with credentials
+  // Вспомогательная функция для автоматического входа с учетными данными
   const autoLogin = async (credentials) => {
     setFormData(credentials);
     setLoading(true);

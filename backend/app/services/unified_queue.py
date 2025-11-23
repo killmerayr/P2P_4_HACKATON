@@ -1,10 +1,8 @@
-# app/services/unified_queue.py - ЧИСТАЯ ВЕРСИЯ БЕЗ PRINT
 from django.utils import timezone
 from django.db import transaction, models
 import threading
 import requests
 from ..models import Queue, Participant
-
 
 class UnifiedQueueSystem:
     def __init__(self, queue_id):
@@ -189,10 +187,9 @@ class UnifiedQueueSystem:
 
                 # Обновляем позиции всех ожидающих
                 self._update_all_positions()
-
+                
                 # Отправляем уведомления об обновлении позиций
                 self._send_position_update_notifications()
-
                 return self._format_participant(next_participant)
 
             return None

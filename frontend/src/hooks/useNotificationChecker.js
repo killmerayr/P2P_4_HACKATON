@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNotifications } from './useNotifications';
-// import { userAPI } from '../services/api'; // ← потом раскомментируешь
+// import { userAPI } from '../services/api'; 
 
 export const useNotificationChecker = () => {
   const { 
@@ -11,7 +11,7 @@ export const useNotificationChecker = () => {
 
   const checkNotifications = async () => {
     try {
-      // ПОТОМ заменишь на реальный API
+      // ПОТОМ заменить на реальный API
       // const response = await userAPI.getMyNotifications();
       
       // Временная заглушка для демо

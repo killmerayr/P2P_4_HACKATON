@@ -5,7 +5,7 @@ export default function AllEvents() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   
-  // Temporary mock data until Events feature is implemented
+  // Временные фиктивные данные до тех пор, пока не будет реализована функция событий
   const events = [
     {
       id: 1,

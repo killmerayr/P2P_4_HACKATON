@@ -1,9 +1,9 @@
-import { useParams, Link, useNavigate } from 'react-router-dom'; // ← ДОБАВЬ useNavigate
+import { useParams, Link, useNavigate } from 'react-router-dom'; 
 import { useState, useEffect } from 'react';
 
 export default function EventDetails() {
   const { id } = useParams();
-  const navigate = useNavigate(); // ← ДОБАВЬ ЭТУ СТРОКУ
+  const navigate = useNavigate(); 
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isRegistering, setIsRegistering] = useState(false);
@@ -38,7 +38,6 @@ export default function EventDetails() {
     }
   };
 
-  // ⭐ ДОБАВЬ ФУНКЦИЮ ДЛЯ ПЕРЕХОДА В ЧАТ ⭐
   const handleOpenChat = () => {
     navigate(`/event/${event.id}/chat`);
   };
@@ -228,7 +227,7 @@ export default function EventDetails() {
                     }
                   </button>
 
-                  {/* ⭐ КНОПКА ЧАТА ⭐ */}
+                  {/* Кнопка чата*/}
                   <button
                     onClick={handleOpenChat}
                     className="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition flex items-center justify-center gap-2"

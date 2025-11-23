@@ -31,27 +31,22 @@ class LoginSerializer(serializers.Serializer):
 
         return data
 
-
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
-
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'password')
-
     def create(self, validated_data):
         user = User.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
             password=validated_data['password'],
-
         )
         return user
 
 
 class OwnerSerializer(serializers.ModelSerializer):
     token_id = serializers.CharField(source='token', read_only=True)
-
     class Meta:
         model = Owner
         fields = ['token', 'name', 'email', 'password', 'is_active', 'created_at', 'token_id']
@@ -60,7 +55,6 @@ class OwnerSerializer(serializers.ModelSerializer):
 
 class OwnerRegisterSerializer(serializers.ModelSerializer):
     token = serializers.UUIDField()
-
     class Meta:
         model = Owner
         fields = ['token', 'name', 'email', 'password']
@@ -105,7 +99,6 @@ class QueueSerializer(serializers.ModelSerializer):
     current_waiting = serializers.SerializerMethodField()
     start_at = serializers.IntegerField(read_only=True)
 
-    # Новые поля
     estimated_wait_display = serializers.SerializerMethodField()
     is_active = serializers.BooleanField(source='status', read_only=True)
 
