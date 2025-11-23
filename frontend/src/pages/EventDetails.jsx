@@ -38,7 +38,6 @@ export default function EventDetails() {
     }
   };
 
-  // ⭐ ДОБАВЬ ФУНКЦИЮ ДЛЯ ПЕРЕХОДА В ЧАТ ⭐
   const handleOpenChat = () => {
     navigate(`/event/${event.id}/chat`);
   };
@@ -228,15 +227,15 @@ export default function EventDetails() {
                     }
                   </button>
 
-                  {/* ⭐ КНОПКА ЧАТА ⭐ */}
+                  /*{}
                   <button
                     onClick={handleOpenChat}
                     className="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition flex items-center justify-center gap-2"
                   >
                     <span>💬</span>
-                    Чат с организатором
+                    организатором
                   </button>
-                </div>
+                </div>*/
 
                 {/* Быстрые действия */}
                 <div className="bg-stone-200 rounded-lg p-4">

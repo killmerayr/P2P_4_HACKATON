@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: p2p_backend
+    restart: always
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ./backend:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    environment:
+      - DEBUG=False
+      - ALLOWED_HOSTS=your-domain.com,www.your-domain.com,your_server_ip
+      - DJANGO_SUPERUSER_USERNAME=admin
+      - DJANGO_SUPERUSER_EMAIL=admin@your-domain.com
+      - DJANGO_SUPERUSER_PASSWORD=ВАШ_СИЛЬНЫЙ_ПАРОЛЬ
+    command: sh -c "python manage.py collectstatic --noinput && python create_admin.py && python manage.py migrate && gunicorn project.wsgi:application --bind 0.0.0.0:8000 --workers 3"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        - VITE_API_URL=https://your-domain.com/api
+    container_name: p2p_frontend
+    restart: always
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  static_volume:
+  media_volume:
