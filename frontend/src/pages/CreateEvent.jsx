@@ -1,5 +1,5 @@
 import { useState } from 'react';
-// import { eventAPI } from '../services/api'; // ← ЗАКОММЕНТИРУЙ пока
+// import { eventAPI } from '../services/api';
 
 export default function CreateEvent() {
   const [formData, setFormData] = useState({
@@ -13,7 +13,6 @@ export default function CreateEvent() {
     contactInfo: ''
   });
 
-  // УБЕРИ лишнюю функцию - у тебя две handleSubmit
   // const handleSumbit = async (formData) => {
   //   try {
   //     await eventAPI.createEvent(formData);

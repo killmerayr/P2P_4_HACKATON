@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// import { eventAPI } from "../services/api"; // ← пока закомментировано
+// import { eventAPI } from "../services/api"; 
 
 export default function MyRegistrations() {
   const statusConfig = {

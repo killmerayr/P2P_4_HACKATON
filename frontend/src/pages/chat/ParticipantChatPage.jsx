@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
-import ChatRoom from "../../components/ChatRoom"; // ← Импорт напрямую
-import ChatSidebar from "../../components/ChatSidebar"; // ← Импорт напрямую
+import ChatRoom from "../../components/ChatRoom";
+import ChatSidebar from "../../components/ChatSidebar";
 import "./chat.css";
 
 export default function ParticipantChatPage() {

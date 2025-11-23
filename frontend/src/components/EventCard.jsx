@@ -8,7 +8,7 @@ export default function EventCard({ event }) {
     return event.id % 2 === 0;
   };
 
-  const userIsRegistered = checkRegistration(); // ← исправил опечатку
+  const userIsRegistered = checkRegistration(); 
 
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition cursor-pointer flex flex-col h-full">
@@ -51,7 +51,7 @@ export default function EventCard({ event }) {
           </div>
         </div>
 
-        {/* Кнопка - исправленная версия */}
+        {/* Кнопка */}
         <Link 
           to={`/events/${event.id}`}
           className={`w-full mt-4 py-3 rounded-lg font-semibold text-center transition ${

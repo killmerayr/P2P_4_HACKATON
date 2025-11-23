@@ -21,12 +21,20 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
+<<<<<<< HEAD
     'corsheaders',
+=======
+    'corsheaders',  
+>>>>>>> 50ab940526a748ff5a7d77f5ccbb5be4b980913f
     'app',
 ]
 
 MIDDLEWARE = [
+<<<<<<< HEAD
     'corsheaders.middleware.CorsMiddleware',
+=======
+    'corsheaders.middleware.CorsMiddleware', 
+>>>>>>> 50ab940526a748ff5a7d77f5ccbb5be4b980913f
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # Для раздачи статики
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -43,6 +51,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://www.your-domain.com",
 ]
 
+<<<<<<< HEAD
 if DEBUG:
     CORS_ALLOWED_ORIGINS += [
         "http://localhost:5173",
@@ -50,6 +59,9 @@ if DEBUG:
         "http://127.0.0.1:5173",
         "http://127.0.0.1:3000",
     ]
+=======
+# CORS_ALLOW_ALL_ORIGINS = True
+>>>>>>> 50ab940526a748ff5a7d77f5ccbb5be4b980913f
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
@@ -114,22 +126,34 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+<<<<<<< HEAD
 # REST Framework
+=======
+>>>>>>> 50ab940526a748ff5a7d77f5ccbb5be4b980913f
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+<<<<<<< HEAD
+=======
+    # Для отладки временно разрешаем всем
+    # После тестирования вернуть IsAuthenticated
+>>>>>>> 50ab940526a748ff5a7d77f5ccbb5be4b980913f
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ]
 }
 
+<<<<<<< HEAD
 # JWT
+=======
+>>>>>>> 50ab940526a748ff5a7d77f5ccbb5be4b980913f
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
 }
 
+<<<<<<< HEAD
 AUTH_USER_MODEL = 'app.User'
 
 # Security settings for production
@@ -148,3 +172,16 @@ CSRF_TRUSTED_ORIGINS = [
     'https://your-domain.com',
     'https://www.your-domain.com',
 ]
+=======
+#CUSTOM USER MODEL
+AUTH_USER_MODEL = 'app.User'
+
+# ===== НАСТРОЙКИ ДЛЯ PRODUCTION =====
+# Раскомментировать это когда будете деплоить на сервер:
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+# SECURE_BROWSER_XSS_FILTER = True
+# SECURE_CONTENT_TYPE_NOSNIFF = True
+# X_FRAME_OPTIONS = 'DENY'
+>>>>>>> 50ab940526a748ff5a7d77f5ccbb5be4b980913f
