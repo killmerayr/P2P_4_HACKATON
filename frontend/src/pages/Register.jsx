@@ -23,54 +23,73 @@ export default function Register() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
+      e.preventDefault();
+      setError('');
 
-    // Validate passwords match
-    if (formData.password !== formData.confirmPassword) {
-      setError('Пароли не совпадают');
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const userData = {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password
-      };
-
-      // Use different endpoint for organizers
-      if (userType === 'organizer') {
-        userData.organization = formData.organization;
-        const response = await authAPI.registerOwner(userData);
-        
-        // Save token and user info (organizer endpoint uses 'token' field)
-        const token = response.data.token || response.data.access;
-        if (token) {
-          localStorage.setItem('token', token);
-          localStorage.setItem('user', JSON.stringify(response.data.user));
-        }
-      } else {
-        const response = await authAPI.register(userData);
-        
-        // Save token and user info (participant endpoint uses 'access' field)
-        const token = response.data.access || response.data.token;
-        if (token) {
-          localStorage.setItem('token', token);
-          localStorage.setItem('user', JSON.stringify(response.data.user));
-        }
+      // Validate passwords match
+      if (formData.password !== formData.confirmPassword) {
+        setError('Пароли не совпадают');
+        return;
       }
 
-      // Redirect to home
-      navigate('/');
-    } catch (err) {
-      console.error('Registration error:', err);
-      setError(err.response?.data?.message || err.response?.data?.error || 'Ошибка регистрации. Попробуйте снова.');
-    } finally {
-      setLoading(false);
-    }
+      setLoading(true);
+
+      try {
+        const userData = {
+          username: formData.name,  // ← ИСПРАВЛЕНО: было name
+          email: formData.email,
+          password: formData.password
+        };
+
+        // Use different endpoint for organizers
+        if (userType === 'organizer') {
+          userData.name = formData.organization;  // Добавляем организацию
+          const response = await authAPI.registerOwner(userData);
+
+          // Save token and user info
+          const token = response.data.token || response.data.access;
+          if (token) {
+            localStorage.setItem('token', token);
+            localStorage.setItem('user', JSON.stringify(response.data.owner || response.data.user));
+          }
+        } else {
+          const response = await authAPI.register(userData);
+
+          // Save token and user info
+          const token = response.data.access || response.data.token;
+          if (token) {
+            localStorage.setItem('token', token);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+          }
+        }
+
+        // Redirect to home
+        navigate('/');
+      } catch (err) {
+        console.error('Registration error:', err);
+
+        // Показать детальную ошибку
+        const errorData = err.response?.data;
+        let errorMessage = 'Ошибка регистрации. Попробуйте снова.';
+
+        if (errorData) {
+          if (typeof errorData === 'string') {
+            errorMessage = errorData;
+          } else if (errorData.username) {
+            errorMessage = `Username: ${errorData.username[0]}`;
+          } else if (errorData.email) {
+            errorMessage = `Email: ${errorData.email[0]}`;
+          } else if (errorData.password) {
+            errorMessage = `Password: ${errorData.password[0]}`;
+          } else if (errorData.message || errorData.error) {
+            errorMessage = errorData.message || errorData.error;
+          }
+        }
+
+        setError(errorMessage);
+      } finally {
+        setLoading(false);
+      }
   };
 
   return (

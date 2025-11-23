@@ -10,24 +10,39 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    username = serializers.CharField(required=False)
+    email = serializers.EmailField(required=False)
     password = serializers.CharField()
 
     def validate(self, data):
         username = data.get('username')
+        email = data.get('email')
         password = data.get('password')
 
-        if username and password:
+        if not (username or email):
+            raise serializers.ValidationError('Необходимо указать username или email')
+
+        if not password:
+            raise serializers.ValidationError('Необходимо указать password')
+
+        # Попытка входа по username или email
+        user = None
+        if username:
             user = authenticate(username=username, password=password)
-            if user:
-                if user.is_active:
-                    data['user'] = user
-                else:
-                    raise serializers.ValidationError('Аккаунт отключен')
+        elif email:
+            try:
+                user_obj = User.objects.get(email=email)
+                user = authenticate(username=user_obj.username, password=password)
+            except User.DoesNotExist:
+                pass
+
+        if user:
+            if user.is_active:
+                data['user'] = user
             else:
-                raise serializers.ValidationError('Неверные учетные данные')
+                raise serializers.ValidationError('Аккаунт отключен')
         else:
-            raise serializers.ValidationError('Необходимо указать username и password')
+            raise serializers.ValidationError('Неверные учетные данные')
 
         return data
 
