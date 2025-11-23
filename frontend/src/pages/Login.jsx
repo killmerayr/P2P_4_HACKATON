@@ -18,8 +18,9 @@ export default function Login() {
     try {
       await login(formData);
       navigate('/');
-    } catch (error) {
+    } catch (err) {
       alert('Ошибка входа');
+      console.error('Login error:', err);
     } finally {
       setLoading(false);
     }
@@ -45,8 +46,9 @@ export default function Login() {
     try {
       await login(credentials);
       navigate('/');
-    } catch (error) {
+    } catch (err) {
       alert('Ошибка входа');
+      console.error('Login error:', err);
     } finally {
       setLoading(false);
     }
@@ -64,8 +66,9 @@ export default function Login() {
     try {
       await login(credentials);
       navigate('/');
-    } catch (error) {
+    } catch (err) {
       alert('Ошибка входа');
+      console.error('Login error:', err);
     } finally {
       setLoading(false);
     }

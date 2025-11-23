@@ -56,7 +56,10 @@ export const useQueue = (queueId) => {
   };
 
   useEffect(() => {
-    fetchQueue();
+    if (queueId) {
+      fetchQueue();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queueId]);
 
   return { 
