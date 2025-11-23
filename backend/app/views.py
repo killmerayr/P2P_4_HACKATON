@@ -53,9 +53,9 @@ class AuthViewSet(viewsets.ViewSet):
             owner = serializer.save()
             print(f"Owner saved: {owner.email}, {owner.name}")
 
-            # СОЗДАЕМ ПОЛЬЗОВАТЕЛЯ ДЛЯ АУТЕНТИФИКАЦИИ
+            # создание пользователя для аутентификации
             try:
-                # Используем email как username (упрощенный вариант)
+                # Используем email как username 
                 username = owner.email
 
                 # Проверяем, не существует ли уже пользователь
@@ -71,7 +71,7 @@ class AuthViewSet(viewsets.ViewSet):
                     )
                     print(f"User created: {user.username}")
 
-                # ВЫДАЕМ JWT ТОКЕН
+                # выдаём JWT токен
                 refresh = RefreshToken.for_user(user)
                 print("JWT token generated")
 
