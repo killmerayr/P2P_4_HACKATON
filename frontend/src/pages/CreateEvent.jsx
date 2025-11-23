@@ -1,5 +1,5 @@
 import { useState } from 'react';
-// import { eventAPI } from '../services/api'; // ← ЗАКОММЕНТИРУЙ пока
+// import { eventAPI } from '../services/api';
 
 export default function CreateEvent() {
   const [formData, setFormData] = useState({
