@@ -19,12 +19,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-    'corsheaders',  # Должен быть ДО app
+    'corsheaders',  
     'app',
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # Должен быть первым
+    'corsheaders.middleware.CorsMiddleware', 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -43,7 +43,6 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
 ]
 
-# Если нужно разрешить ВСЕ origins (только для разработки!)
 # CORS_ALLOW_ALL_ORIGINS = True
 
 # Разрешаем отправку cookies и авторизационных данных
@@ -127,19 +126,17 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ===== REST FRAMEWORK НАСТРОЙКИ =====
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     # Для отладки временно разрешаем всем
-    # После тестирования верните IsAuthenticated
+    # После тестирования вернуть IsAuthenticated
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ]
 }
 
-# ===== JWT НАСТРОЙКИ =====
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
@@ -171,11 +168,11 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
-# ===== CUSTOM USER MODEL =====
+#CUSTOM USER MODEL
 AUTH_USER_MODEL = 'app.User'
 
 # ===== НАСТРОЙКИ ДЛЯ PRODUCTION =====
-# Раскомментируйте это когда будете деплоить на сервер:
+# Раскомментировать это когда будете деплоить на сервер:
 # SECURE_SSL_REDIRECT = True
 # SESSION_COOKIE_SECURE = True
 # CSRF_COOKIE_SECURE = True
