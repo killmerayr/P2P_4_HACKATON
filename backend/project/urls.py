@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
-from django.shortcuts import render
+from django.conf import settings
+from django.conf.urls.static import static
 from django.http import HttpResponse
 
 def api_info(request):
@@ -94,3 +95,6 @@ urlpatterns = [
     path('api-info/', api_info, name='api-info'),
     path('health/', health_check, name='health'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

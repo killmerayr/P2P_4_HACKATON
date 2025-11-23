@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-// import { eventAPI } from '../services/api'; // пока заглушка
 
 export default function AdminPanel() {
   const [event, setEvent] = useState(null);
