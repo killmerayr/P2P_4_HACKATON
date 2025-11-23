@@ -1,4 +1,3 @@
-# app/services/unified_queue.py - ЧИСТАЯ ВЕРСИЯ БЕЗ PRINT
 from django.utils import timezone
 from django.db import transaction, models
 import threading
@@ -174,7 +173,7 @@ class UnifiedQueueSystem:
 
             if next_participant:
                 next_participant.status = 'serving'
-                next_participant.serving_start = timezone.now()  # ✅ Фиксируем время начала
+                next_participant.serving_start = timezone.now()  # Фиксируем время начала
                 next_participant.save()
 
                 # Обновляем счетчики
