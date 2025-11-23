@@ -33,18 +33,42 @@ export default function Login() {
   };
 
   // Функции для быстрого заполнения тестовых данных
-  const fillAdminCredentials = () => {
-    setFormData({
+  const fillAdminCredentials = async () => {
+    const credentials = {
       email: 'admin@eventhub.ru',
       password: 'admin123'
-    });
+    };
+    setFormData(credentials);
+    
+    // Auto-submit
+    setLoading(true);
+    try {
+      await login(credentials);
+      navigate('/');
+    } catch (error) {
+      alert('Ошибка входа');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const fillUserCredentials = () => {
-    setFormData({
+  const fillUserCredentials = async () => {
+    const credentials = {
       email: 'user@eventhub.ru',
       password: 'user123'
-    });
+    };
+    setFormData(credentials);
+    
+    // Auto-submit
+    setLoading(true);
+    try {
+      await login(credentials);
+      navigate('/');
+    } catch (error) {
+      alert('Ошибка входа');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

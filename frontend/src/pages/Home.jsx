@@ -1,4 +1,4 @@
-import EventGrid from '../components/EventGrid';
+import QueueGrid from '../components/QueueGrid';
 import Header from '../components/Header';
 
 export default function Home() {
@@ -10,14 +10,14 @@ export default function Home() {
         {/* Приветствие */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            Мероприятия
+            Электронные очереди
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Открывай новые возможности, находи единомышленников и участвуй в событиях университета
+            Удобное управление очередями и запись на услуги
           </p>
         </div>
 
-        <EventGrid />
+        <QueueGrid />
       </main>
     </div>
   );

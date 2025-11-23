@@ -40,28 +40,37 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // 🔹 Временный тестовый login
+  // Real API login
   const login = async (credentials) => {
-    let mockUser;
-    if (credentials.email === 'admin@eventhub.ru') {
-      mockUser = { id: 1, name: 'Админ', email: credentials.email, role: 'admin' };
-    } else {
-      mockUser = { id: 2, name: 'Участник', email: credentials.email, role: 'user' };
+    try {
+      const response = await authAPI.login(credentials);
+      const { access, user } = response.data;
+      
+      localStorage.setItem('token', access);
+      localStorage.setItem('user', JSON.stringify(user));
+      setUser(user);
+      
+      return user;
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
     }
-    const mockToken = 'mock-jwt-token';
-    localStorage.setItem('token', mockToken);
-    localStorage.setItem('user', JSON.stringify(mockUser));
-    setUser(mockUser);
-    return mockUser;
   };
 
   const register = async (userData) => {
-    const mockUser = { id: Date.now(), name: userData.name, email: userData.email, role: 'user' };
-    const mockToken = 'mock-jwt-token';
-    localStorage.setItem('token', mockToken);
-    localStorage.setItem('user', JSON.stringify(mockUser));
-    setUser(mockUser);
-    return mockUser;
+    try {
+      const response = await authAPI.register(userData);
+      const { access, user } = response.data;
+      
+      localStorage.setItem('token', access);
+      localStorage.setItem('user', JSON.stringify(user));
+      setUser(user);
+      
+      return user;
+    } catch (error) {
+      console.error('Registration error:', error);
+      throw error;
+    }
   };
 
   const logout = () => {
