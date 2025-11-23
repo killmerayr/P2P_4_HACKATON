@@ -12,17 +12,12 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.dev  # ← Используем dev версию
+      dockerfile: Dockerfile.dev 
     ports:
       - "5173:5173"
     volumes:
       - ./frontend:/app
       - /app/node_modules
     environment:
-<<<<<<< HEAD
       - VITE_API_URL=http://backend:8000
     command: npm run dev -- --host
-=======
-      - VITE_API_URL=http://backend:8000  # ← Исправлено на backend
-    command: npm run dev -- --host
->>>>>>> cfe9e6f43f0452ffa08c65e07119ec700ba26b77
